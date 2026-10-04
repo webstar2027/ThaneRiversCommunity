@@ -21,7 +21,52 @@ app.post("/api/messages",requireMember,async(req,res)=>{const body=String(req.bo
 app.get("/api/admin/messages",requireAdmin,async(req,res)=>{const {data,error}=await supabase.from("messages").select("*,users!messages_user_id_fkey(name,email)").order("created_at",{ascending:true});if(error)return res.status(500).json({error:"Could not load community messages."});res.json({messages:data||[]})});
 app.post("/api/admin/messages",requireAdmin,async(req,res)=>{const userId=String(req.body.user_id||"");const body=String(req.body.body||"").trim();if(!userId||!body)return res.status(400).json({error:"User and message are required."});const {data,error}=await supabase.from("messages").insert({user_id:userId,sender_role:"admin",body}).select("*").single();if(error)return res.status(500).json({error:"Could not send admin message."});res.json({message:data})});
 app.post("/api/flutterwave/checkout",async(req,res)=>{try{const type=String(req.body.type||"");let amount;let userId=null;let email=String(req.body.email||"").trim().toLowerCase();let name=String(req.body.name||"").trim();if(req.session?.user){userId=req.session.user.id;email=req.session.user.email;name=req.session.user.name||name}if(type==="subscription"){if(!userId)return res.status(401).json({error:"Create an account or sign in before subscribing."});amount=15}else if(type==="donation"){amount=Number(req.body.amount)}else return res.status(400).json({error:"Invalid payment type."});if(!Number.isFinite(amount)||amount<1)return res.status(400).json({error:"Enter a valid amount."});const tx_ref=`TRV-${type.toUpperCase()}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;const {data:payment,error:pe}=await supabase.from("support_payments").insert({user_id:userId,customer_email:email||null,amount,type,status:"pending",payment_reference:tx_ref}).select("*").single();if(pe)throw pe;const base=process.env.BASE_URL||`https://${req.get("host")}`;const currency=process.env.FLW_CURRENCY||"USD";const response=await fetch("https://api.flutterwave.com/v3/payments",{method:"POST",headers:{Authorization:`Bearer ${process.env.FLW_SECRET_KEY||""}`,"Content-Type":"application/json"},body:JSON.stringify({amount,currency,tx_ref,redirect_url:`${base}/flutterwave/callback`,customer:{email:email||undefined,name:name||"Thane Rivers supporter"},customizations:{title:type==="subscription"?"Thane Rivers Community Subscription":"Support Thane Rivers",description:type==="subscription"?"Two months of Thane Rivers community access":"Donation to Thane Rivers"},meta:{support_payment_id:payment.id,type}})});const out=await response.json();if(!response.ok||out.status!=="success")throw new Error(out.message||"Flutterwave checkout could not be created.");res.json({link:out.data.link});}catch(e){console.error(e);res.status(500).json({error:"Could not start Flutterwave checkout. Check FLW_SECRET_KEY and FLW_CURRENCY on Render."})}});
-app.get("/flutterwave/callback",async(req,res)=>{try{const txRef=String(req.query.tx_ref||"");if(!txRef)return res.redirect("/?payment=failed");const response=await fetch(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${encodeURIComponent(txRef)}`,{headers:{Authorization:`Bearer ${process.env.FLW_SECRET_KEY||""},"Content-Type":"application/json"}});const out=await response.json();const status=out.status==="success"&&out.data?.status==="successful"?"successful":"failed";if(status==="successful"){const {data:p}=await supabase.from("support_payments").select("id,type,user_id").eq("payment_reference",txRef).maybeSingle();if(p?.type==="subscription"){const d=new Date();d.setMonth(d.getMonth()+2);await supabase.from("support_payments").update({status,expires_at:d.toISOString()}).eq("payment_reference",txRef)}else{await supabase.from("support_payments").update({status}).eq("payment_reference",txRef)}}else await supabase.from("support_payments").update({status}).eq("payment_reference",txRef);res.redirect(`/?payment=${status}`);}catch(e){console.error(e);res.redirect("/?payment=failed")}});
+app.get("/flutterwave/callback", async (req, res) => {
+  try {
+    const txRef = String(req.query.tx_ref || "").trim();
+    if (!txRef) return res.redirect("/?payment=failed");
+
+    const verifyUrl = "https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=" + encodeURIComponent(txRef);
+    const response = await fetch(verifyUrl, {
+      headers: {
+        Authorization: "Bearer " + (process.env.FLW_SECRET_KEY || ""),
+        "Content-Type": "application/json"
+      }
+    });
+    const out = await response.json();
+    const successful = out.status === "success" && out.data && out.data.status === "successful";
+    const status = successful ? "successful" : "failed";
+
+    const { data: payment, error: paymentError } = await supabase
+      .from("support_payments")
+      .select("id,type,user_id,amount,status")
+      .eq("payment_reference", txRef)
+      .maybeSingle();
+
+    if (paymentError) throw paymentError;
+
+    if (payment) {
+      if (successful && payment.type === "subscription") {
+        const expires = new Date();
+        expires.setMonth(expires.getMonth() + 2);
+        await supabase
+          .from("support_payments")
+          .update({ status: "successful", expires_at: expires.toISOString() })
+          .eq("id", payment.id);
+      } else {
+        await supabase
+          .from("support_payments")
+          .update({ status: status })
+          .eq("id", payment.id);
+      }
+    }
+
+    res.redirect("/?payment=" + status);
+  } catch (e) {
+    console.error("Flutterwave verification error:", e);
+    res.redirect("/?payment=failed");
+  }
+});
 app.get("/api/admin/members",requireAdmin,async(_,res)=>{const {data,error}=await supabase.from("users").select("id,name,email,is_admin,created_at").order("created_at",{ascending:false});if(error)return res.status(500).json({error:"Could not load members."});res.json({members:data||[]})});
-app.get("*",(_,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
+app.use((req,res,next)=>{if(req.method==="GET"&&req.accepts("html"))return res.sendFile(path.join(__dirname,"public","index.html"));next();});
 app.listen(PORT,()=>console.log(`Thane Rivers Community running on ${PORT}`));
