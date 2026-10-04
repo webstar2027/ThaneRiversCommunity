@@ -1,5 +1,15 @@
-# Thane Rivers Store redesign
-Uses the supplied Thane Rivers logo at `public/thane-rivers-logo.png`.
-The storefront now follows the supplied reference direction: dark background, cyan accents, large artist hero, merch section, account/cart controls, and responsive mobile layout.
-The hero artwork blocks are original placeholders and should be replaced with artwork you own or have permission to use.
-No emojis are used in the UI.
+# Thane Rivers Community
+
+Final direction:
+- Community/chat website only — no store and no advertising.
+- Black, white and blue visual identity.
+- Public Donate button: any amount, no account required.
+- Subscription: $15 for 2 months.
+- Visitor creates an account/signs in before paying for subscription.
+- Successful subscription unlocks private website chat for two months.
+- Donation can also be made from the member account.
+- Password show/hide control.
+- Responsive on mobile and desktop.
+- Supabase stores users, messages and payment records.
+- Flutterwave handles checkout.
+- Render hosts the app.

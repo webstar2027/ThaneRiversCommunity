@@ -1,24 +1,16 @@
 services:
   - type: web
-    name: thane-rivers-store
+    name: thane-rivers-community
     runtime: node
     plan: free
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: NODE_VERSION
-        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: FLW_CURRENCY
+        value: USD
       - key: SITE_NAME
-        value: Thane Rivers Store
-      - key: SUPABASE_BUCKET
-        value: products
+        value: Thane Rivers
       - key: SESSION_SECRET
         generateValue: true
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-      - key: ADMIN_EMAIL
-        sync: false
-      - key: ADMIN_PASSWORD
-        sync: false

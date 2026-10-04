@@ -1,12 +1,82 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thane Rivers Store</title><link rel="stylesheet" href="/style.css"></head><body>
-<header class="site-header"><a class="brand" href="/"><img src="/thane-rivers-logo.png" alt="Thane Rivers"></a><nav class="desktop-nav"><a href="#home">Home</a><a href="#shop">Merch Store</a><a href="#about">About</a></nav><div class="header-actions"><button id="searchBtn">Search</button><button id="accountBtn">Account</button><button id="cartBtn">Cart <span id="count">0</span></button><button id="menu">Menu</button></div></header>
-<main id="home"><section class="hero-split"><div class="hero-copy"><div class="hero-kicker">THANE RIVERS STORE</div><h1>LOVE YOURSELF.<br><span>BE HAPPY.</span><br>BE HEALTHY.</h1><p>Original artwork, physical pieces, and merchandise from Thane Rivers.</p><a class="cyan-btn" href="#shop">Shop the collection</a></div><div class="hero-artwork"><img src="/thane-rivers-art-band.jpg" alt="Thane Rivers artwork with four portrait panels and Thane Rivers logo"></div></section>
-<section class="statement"><div class="cyan-title">MYGS ARE HERE!</div><p>Custom-designed pieces and one-of-a-kind work. Replace this message with your own announcement when your collection is ready.</p></section>
-<section id="shop" class="section"><div class="sectiontop"><div><small>THE COLLECTION</small><h2>Merch Store</h2></div><div class="filters"><button class="active" data-filter="all">All</button><button data-filter="art">Artwork</button><button data-filter="mugs">Mugs</button></div></div><div id="products" class="grid"></div></section>
-<section id="about" class="about"><div class="about-image">THANE<br>RIVERS</div><div><small>ABOUT THE STORE</small><h2>Art that feels personal.</h2><p>This is your space for original artwork, physical products, announcements, and the story behind each piece.</p><p>Customers can create an account, order products, and message you directly through their private account.</p></div></section>
-<section class="support"><small>SUPPORT THE WORK</small><h2>Subscribe or contribute.</h2><p>Give your audience another way to support the art through a subscription or optional contribution.</p><button id="supportBtn" class="cyan-btn">Subscribe / Donate</button></section></main>
-<footer><div>THANE RIVERS STORE</div><div>© <span id="year"></span> Thane Rivers</div></footer>
-<div id="modal" class="overlay"><div class="modal"><button class="close" id="closeModal">Close</button><div id="authView"><small>CUSTOMER ACCOUNT</small><h2 id="authTitle">Sign in</h2><form id="authForm"><div id="nameField" class="hidden"><label>Name<input id="name"></label></div><label>Email<input id="email" type="email" required></label><label>Password<span class="pw"><input id="password" type="password" minlength="8" required><button type="button" class="show" data-target="password">Show</button></span></label><button class="darkbtn full">Continue</button></form><button id="toggleAuth" class="textbtn">Create an account instead</button><p id="authMsg" class="msg"></p></div><div id="accountView" class="hidden"><small>ACCOUNT</small><h2 id="welcome"></h2><button class="darkbtn full" id="ordersBtn">My orders</button><button class="lightbtn full" id="chatBtn">Message the store</button><button class="textbtn" id="logoutBtn">Log out</button></div></div></div>
-<div id="cart" class="drawer"><div class="drawerhead"><h3>Cart</h3><button class="close" id="closeCart">Close</button></div><div id="cartItems"></div><div class="total"><span>Total</span><b id="total">$0.00</b></div><button id="checkoutBtn" class="darkbtn full">Checkout</button></div>
-<div id="checkout" class="overlay"><div class="modal"><button class="close" id="closeCheckout">Close</button><small>CHECKOUT</small><h2>Delivery details</h2><form id="checkoutForm"><label>Full name<input id="shipName" required></label><label>Phone<input id="phone" required></label><label>Address<textarea id="address" required></textarea></label><label>City<input id="city" required></label><label>Country<input id="country" value="Nigeria" required></label><button class="darkbtn full">Place order</button></form><p id="checkoutMsg" class="msg"></p></div></div>
-<div id="admin" class="overlay"><div class="modal wide"><button class="close" id="closeAdmin">Close</button><small>ADMIN</small><h2>Store dashboard</h2><div class="tabs"><button id="loadProducts">Products</button><button id="loadOrders">Orders</button></div><div id="adminContent"></div></div></div><div id="toast" class="toast"></div><script src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Thane Rivers — a private community for fans to connect, chat, subscribe and support the work.">
+<title>Thane Rivers</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home"><img src="/thane-rivers-logo.png" alt="Thane Rivers"></a>
+  <nav class="desktop-nav">
+    <a href="#home">Home</a><a href="#community">Community</a><a href="#support">Support</a><a href="#contact">Contact</a><a href="#about">About</a>
+  </nav>
+  <div class="actions"><button id="accountBtn" class="nav-button">Account</button><button id="donateTopBtn" class="nav-donate">Donate</button><button id="menuBtn" class="mobile-only">Menu</button></div>
+</header>
+<div id="mobileNav" class="mobile-nav"><a href="#home">Home</a><a href="#community">Community</a><a href="#support">Support</a><a href="#contact">Contact</a><a href="#about">About</a></div>
+
+<main>
+<section id="home" class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">THANE RIVERS COMMUNITY</p>
+    <h1>LOVE YOURSELF.<br><span>BE HAPPY.</span><br>BE HEALTHY.</h1>
+    <p class="lead">A private online space for fans to connect, talk directly with Thane Rivers, and support the work.</p>
+    <div class="hero-buttons"><button id="subscribeBtn" class="button primary">Subscribe — $15 / 2 months</button><button id="donateBtnHero" class="button outline">Donate</button></div><p class="hero-note">Create an account first, then subscribe for two months of private community access.</p>
+  </div>
+  <div class="hero-art"><img src="/thane-rivers-art-band.jpg" alt="Thane Rivers artwork"></div>
+</section>
+
+<section class="statement"><p>THANE RIVERS COMMUNITY</p><h2>Connect. Talk. Support.</h2><span>A private community for fans. No advertisements. No store. No distractions.</span></section>
+
+<section id="community" class="section">
+  <div class="section-heading"><p class="eyebrow">THE COMMUNITY</p><h2>A place to talk directly.</h2><p>Create a free account and use the private website chat to communicate with Thane Rivers.</p></div>
+  <div class="community-grid">
+    <article class="feature-card dark-card"><span>01</span><h3>Create your account</h3><p>Start with a free account using your name, email and password.</p><button class="button primary" id="createAccountBtn">Create account</button></article>
+    <article class="feature-card blue-card"><span>02</span><h3>Subscribe for $15</h3><p>After creating an account, pay $15 through Flutterwave and receive two months of community access.</p><button class="button dark" id="subscribeCommunityBtn">Subscribe</button></article>
+    <article class="feature-card white-card"><span>03</span><h3>Chat privately</h3><p>Once subscribed, open your private conversation and message Thane Rivers directly.</p><button class="button dark" id="chatBtn">Open chat</button></article>
+  </div>
+</section>
+
+<section id="support" class="support-section">
+  <div class="support-inner">
+    <div><p class="eyebrow">SUPPORT THANE RIVERS</p><h2>Two ways to support.</h2><p>Subscription and donations are completely separate. Subscription is $15 for two months of private community access. Donations are optional and you choose the amount.</p></div>
+    <div class="support-cards">
+      <article class="support-card subscription-card"><p class="eyebrow">COMMUNITY MEMBERSHIP</p><h3>$15</h3><p>Two months of private community access. Create an account first, then pay securely with Flutterwave.</p><button id="subscribeSupportBtn" class="button primary full">Subscribe for $15</button></article>
+      <article class="support-card donation-card"><p class="eyebrow">DONATION</p><h3>Any amount</h3><p>You can donate without creating an account, or donate later from your member area.</p><label>Amount (USD)<input id="donationAmount" type="number" min="1" step="1" placeholder="25"></label><button id="donateBtn" class="button outline dark-text full">Donate with Flutterwave</button></article>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about-section"><div class="about-image"><img src="/thane-rivers-hero.jpg" alt="Thane Rivers"></div><div><p class="eyebrow">ABOUT</p><h2>Welcome to the official community.</h2><p>This website is designed for direct communication, community membership and support. There are no store listings or advertising sections in this version.</p><button id="aboutAccountBtn" class="button primary">Join the community</button></div></section>
+
+<section id="contact" class="section contact-section">
+  <div class="section-heading">
+    <p class="eyebrow">CONTACT</p>
+    <h2>Stay connected.</h2>
+    <p>For questions, messages, or social updates, connect with Thane Rivers here.</p>
+  </div>
+  <div class="contact-grid">
+    <a class="contact-card" href="mailto:YOUR-GMAIL-HERE">
+      <span class="contact-label">GMAIL</span>
+      <strong>YOUR GMAIL ADDRESS</strong>
+      <small>Add your Gmail address here later</small>
+    </a>
+    <a class="contact-card" href="https://x.com/thaneRiversCHT" target="_blank" rel="noopener noreferrer">
+      <span class="contact-label">X</span>
+      <strong>@thaneRiversCHT</strong>
+      <small>Follow Thane Rivers on X</small>
+    </a>
+  </div>
+</section>
+</main>
+<footer><img src="/thane-rivers-logo.png" alt="Thane Rivers"><p>© <span id="year"></span> Thane Rivers. All rights reserved.</p></footer>
+
+<div id="accountModal" class="overlay"><div class="modal"><button class="close" data-close="accountModal">Close</button><div id="authView"><p class="eyebrow">ACCOUNT</p><h2 id="authTitle">Sign in</h2><form id="authForm"><div id="nameField" class="hidden"><label>Name<input id="name" autocomplete="name"></label></div><label>Email<input id="email" type="email" autocomplete="email" required></label><label>Password<span class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button type="button" class="show" data-target="password">Show</button></span></label><button class="button primary full">Continue</button></form><button id="toggleAuth" class="text-button">Create an account instead</button><p id="authMsg" class="error"></p></div><div id="accountView" class="hidden"><p class="eyebrow">YOUR ACCOUNT</p><h2 id="welcome"></h2><p id="membershipStatus" class="muted"></p><button id="chatFromAccount" class="button primary full">Open private chat</button><button id="donateFromAccount" class="button outline full">Donate</button><button id="subscribeFromAccount" class="button outline full">Subscribe for $15</button><button id="logoutBtn" class="text-button">Log out</button></div></div></div>
+
+<div id="chatModal" class="overlay"><div class="modal chat-modal"><button class="close" data-close="chatModal">Close</button><p class="eyebrow">PRIVATE CHAT</p><h2>Message Thane Rivers</h2><p class="muted">Your messages are sent directly to the admin account.</p><div id="chatMessages" class="chat-messages"><p class="muted">Loading conversation...</p></div><form id="chatForm" class="chat-form"><input id="chatInput" maxlength="2000" placeholder="Write a message..." required><button class="button primary">Send</button></form></div></div>
+<div id="donationModal" class="overlay"><div class="modal"><button class="close" data-close="donationModal">Close</button><p class="eyebrow">DONATION</p><h2>Choose any amount.</h2><p class="muted">You do not need an account to donate.</p><label>Amount (USD)<input id="donationAmountModal" type="number" min="1" step="1" placeholder="25"></label><button id="donateModalBtn" class="button primary full">Continue to Flutterwave</button><p id="donationMsg" class="error"></p></div></div><div id="toast" class="toast"></div>
+<script src="/app.js"></script>
+</body>
+</html>
