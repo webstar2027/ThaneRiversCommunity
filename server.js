@@ -4,8 +4,8 @@ const {createClient}=require("@supabase/supabase-js");
 const app=express(),PORT=process.env.PORT||3000;
 const rawSupabaseUrl=String(process.env.SUPABASE_URL||"").trim();
 const supabaseUrl=rawSupabaseUrl
-  .replace(/\\/rest\\/v1\\/?$/i,"")
-  .replace(/\\/+$/,"");
+  .replace(/\/rest\/v1\/?$/i,"")
+  .replace(/\/+$/,"");
 const supabaseKey=String(process.env.SUPABASE_SERVICE_ROLE_KEY||"").trim();
 if(!supabaseUrl||!supabaseKey){
   console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.");
