@@ -10,8 +10,13 @@ const supabaseUrl=rawSupabaseUrl
   .replace(/\/+$/,"");
 const supabaseKey=String(process.env.SUPABASE_SERVICE_ROLE_KEY||"").trim();
 const supabaseConfigured=Boolean(supabaseUrl&&supabaseKey);
+console.log("Supabase configuration check:", {
+  urlPresent: Boolean(supabaseUrl),
+  keyPresent: Boolean(supabaseKey),
+  urlHost: (()=>{ try { return supabaseUrl ? new URL(supabaseUrl).host : null; } catch { return "invalid-url"; } })()
+});
 if(!supabaseConfigured){
-  console.error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are not set. The web server will start, but database features remain disabled until both Render variables are added.");
+  console.error("Supabase is not available to this running process. SUPABASE_URL present:", Boolean(supabaseUrl), "SUPABASE_SERVICE_ROLE_KEY present:", Boolean(supabaseKey));
 }
 const supabase=supabaseConfigured?createClient(supabaseUrl,supabaseKey):null;
 const requireSupabase=(_,res,next)=>{
@@ -25,7 +30,13 @@ const requireUser=(req,res,next)=>req.session?.user?next():res.status(401).json(
 const requireAdmin=(req,res,next)=>req.session?.user?.is_admin?next():res.status(403).json({error:"Admin access only."});
 async function byEmail(email){const {data,error}=await supabase.from("users").select("*").eq("email",String(email).toLowerCase()).maybeSingle();if(error)throw error;return data;}
 async function addUserSession(req,u){const now=new Date().toISOString();const {data:membership}=await supabase.from("support_payments").select("id,status,expires_at").eq("user_id",u.id).eq("type","subscription").eq("status","successful").gt("expires_at",now).order("expires_at",{ascending:false}).limit(1).maybeSingle();req.session.user={id:u.id,email:u.email,name:u.name,is_admin:u.is_admin,subscribed:!!membership,subscription_expires_at:membership?.expires_at||null};}
-app.get("/health",(_,res)=>res.json({ok:true,site:"Thane Rivers Community",supabase_configured:supabaseConfigured}));
+app.get("/health",(_,res)=>res.json({
+  ok:true,
+  site:"Thane Rivers Community",
+  supabase_configured:supabaseConfigured,
+  supabase_url_present:Boolean(supabaseUrl),
+  supabase_key_present:Boolean(supabaseKey)
+}));
 app.get("/api/config",(_,res)=>res.json({subscription_amount:SUBSCRIPTION_AMOUNT,subscription_months:SUBSCRIPTION_MONTHS,currency:process.env.FLW_CURRENCY||"USD"}));
 app.get("/api/me",requireSupabase,async(req,res)=>{if(!req.session?.user)return res.json({user:null});const u=await byEmail(req.session.user.email);if(!u)return res.json({user:null});await addUserSession(req,u);res.json({user:req.session.user});});
 app.post("/api/register",requireSupabase,async(req,res)=>{try{const name=String(req.body.name||"").trim(),email=String(req.body.email||"").trim().toLowerCase(),password=String(req.body.password||"");if(!email||!password||password.length<8)return res.status(400).json({error:"Use an email and a password of at least 8 characters."});if(await byEmail(email))return res.status(409).json({error:"An account with that email already exists."});const password_hash=await bcrypt.hash(password,12);const {data,error}=await supabase.from("users").insert({name,email,password_hash}).select("id,email,name,is_admin").single();if(error)throw error;req.session.user={...data,subscribed:false};res.json({user:req.session.user});}catch(e){console.error("Registration error:",e);res.status(500).json({error:"Could not create account."})}});
