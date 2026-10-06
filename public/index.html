@@ -13,9 +13,9 @@
   <nav class="desktop-nav">
     <a href="#home">Home</a><a href="#community">Community</a><a href="#support">Support</a><a href="#contact">Contact</a><a href="#about">About</a>
   </nav>
-  <div class="actions"><button id="accountBtn" class="nav-button">Account</button><button id="menuBtn" class="mobile-only">Menu</button></div>
+  <div class="actions"><button id="accountBtn" class="nav-button">Account</button><button id="donateTopBtn" class="nav-donate">Donate</button><button id="menuBtn" class="mobile-only">Menu</button></div>
 </header>
-<div id="mobileNav" class="mobile-nav"><a href="#home">Home</a><a href="#community">Community</a><a href="#support">Support</a><a href="#contact">Contact</a><a href="#about">About</a><button id="donateMenuBtn" class="menu-action">Donate</button></div>
+<div id="mobileNav" class="mobile-nav"><a href="#home">Home</a><a href="#community">Community</a><a href="#support">Support</a><a href="#contact">Contact</a><a href="#about">About</a></div>
 
 <main>
 <section id="home" class="hero">
@@ -23,7 +23,7 @@
     <p class="eyebrow">THANE RIVERS COMMUNITY</p>
     <h1>LOVE YOURSELF.<br><span>BE HAPPY.</span><br>BE HEALTHY.</h1>
     <p class="lead">A private online space for fans to connect, talk directly with Thane Rivers, and support the work.</p>
-    <div class="hero-buttons"><button id="subscribeBtn" class="button primary">Subscribe — $15 / 2 months</button></div><p class="hero-note">Create an account first, then subscribe for two months of private community access.</p>
+    <div class="hero-buttons"><button id="subscribeBtn" class="button primary">Subscribe — $15 / 2 months</button><button id="donateBtnHero" class="button outline">Donate</button></div><p class="hero-note">Create an account first, then subscribe for two months of private community access.</p>
   </div>
 </section>
 
@@ -43,6 +43,7 @@
     <div><p class="eyebrow">SUPPORT THANE RIVERS</p><h2>Two ways to support.</h2><p>Subscription and donations are completely separate. Subscription is $15 for two months of private community access. Donations are optional and you choose the amount.</p></div>
     <div class="support-cards">
       <article class="support-card subscription-card"><p class="eyebrow">COMMUNITY MEMBERSHIP</p><h3>$15</h3><p>Two months of private community access. Create an account first, then pay securely with Flutterwave.</p><button id="subscribeSupportBtn" class="button primary full">Subscribe for $15</button></article>
+      <article class="support-card donation-card"><p class="eyebrow">DONATION</p><h3>Any amount</h3><p>You can donate without creating an account, or donate later from your member area.</p><label>Amount (USD)<input id="donationAmount" type="number" min="1" step="1" placeholder="25"></label><button id="donateBtn" class="button outline dark-text full">Donate with Flutterwave</button></article>
     </div>
   </div>
 </section>
