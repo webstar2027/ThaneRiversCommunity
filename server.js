@@ -2,24 +2,7 @@ require("dotenv").config();
 const express=require("express"),path=require("path"),bcrypt=require("bcryptjs"),cookieSession=require("cookie-session");
 const {createClient}=require("@supabase/supabase-js");
 const app=express(),PORT=process.env.PORT||3000;
-
-// Render/Supabase setup. Supabase's createClient expects the project URL,
-// not the REST endpoint. If SUPABASE_URL was copied from the Data API and
-// contains /rest/v1, normalize it so requests do not become /rest/v1/rest/v1.
-function normalizeSupabaseUrl(value){
-  let url=String(value||"").trim().replace(/\/+$/,"");
-  url=url.replace(/\/rest\/v1$/i,"");
-  return url;
-}
-const supabaseUrl=normalizeSupabaseUrl(process.env.SUPABASE_URL);
-const supabaseServiceRoleKey=String(process.env.SUPABASE_SERVICE_ROLE_KEY||"").trim();
-if(!supabaseUrl||supabaseUrl==="https://example.supabase.co"){
-  console.error("SUPABASE_URL is missing or still set to the example value.");
-}
-if(!supabaseServiceRoleKey||supabaseServiceRoleKey==="missing"){
-  console.error("SUPABASE_SERVICE_ROLE_KEY is missing.");
-}
-const supabase=createClient(supabaseUrl||"https://example.supabase.co",supabaseServiceRoleKey||"missing");
+const supabase=createClient(process.env.SUPABASE_URL||"https://example.supabase.co",process.env.SUPABASE_SERVICE_ROLE_KEY||"missing");
 app.use(express.json());app.use(express.urlencoded({extended:true}));
 app.use(cookieSession({name:"trs_session",keys:[process.env.SESSION_SECRET||"change-me"],httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",maxAge:604800000}));
 app.use(express.static(path.join(__dirname,"public")));
@@ -29,22 +12,7 @@ async function byEmail(email){const {data,error}=await supabase.from("users").se
 async function addUserSession(req,u){const now=new Date().toISOString();const {data:membership}=await supabase.from("support_payments").select("id,status,expires_at").eq("user_id",u.id).eq("type","subscription").eq("status","successful").gt("expires_at",now).order("expires_at",{ascending:false}).limit(1).maybeSingle();req.session.user={id:u.id,email:u.email,name:u.name,is_admin:u.is_admin,subscribed:!!membership,subscription_expires_at:membership?.expires_at||null};}
 app.get("/health",(_,res)=>res.json({ok:true,site:"Thane Rivers Community"}));
 app.get("/api/me",async(req,res)=>{if(!req.session?.user)return res.json({user:null});const u=await byEmail(req.session.user.email);if(!u)return res.json({user:null});await addUserSession(req,u);res.json({user:req.session.user});});
-app.post("/api/register",async(req,res)=>{try{
-  const name=String(req.body.name||"").trim();
-  const email=String(req.body.email||"").trim().toLowerCase();
-  const password=String(req.body.password||"");
-  if(!email||!password||password.length<8)return res.status(400).json({error:"Use an email and a password of at least 8 characters."});
-  const existing=await byEmail(email);
-  if(existing)return res.status(409).json({error:"An account with that email already exists."});
-  const password_hash=await bcrypt.hash(password,12);
-  const {data,error}=await supabase.from("users").insert({name:name||null,email,password_hash}).select("id,email,name,is_admin").single();
-  if(error){
-    console.error("Supabase registration error:",error);
-    return res.status(500).json({error:"Could not create account. Check the Supabase connection and users table."});
-  }
-  req.session.user={...data,subscribed:false,subscription_expires_at:null};
-  res.json({user:req.session.user});
-}catch(e){console.error("Registration error:",e);res.status(500).json({error:"Could not create account."})}});
+app.post("/api/register",async(req,res)=>{try{const name=String(req.body.name||"").trim(),email=String(req.body.email||"").trim().toLowerCase(),password=String(req.body.password||"");if(!email||!password||password.length<8)return res.status(400).json({error:"Use an email and a password of at least 8 characters."});if(await byEmail(email))return res.status(409).json({error:"An account with that email already exists."});const password_hash=await bcrypt.hash(password,12);const {data,error}=await supabase.from("users").insert({name,email,password_hash}).select("id,email,name,is_admin").single();if(error)throw error;req.session.user={...data,subscribed:false};res.json({user:req.session.user});}catch(e){console.error(e);res.status(500).json({error:"Could not create account."})}});
 app.post("/api/login",async(req,res)=>{try{const u=await byEmail(req.body.email||"");if(!u||!(await bcrypt.compare(String(req.body.password||""),u.password_hash)))return res.status(401).json({error:"Incorrect email or password."});await addUserSession(req,u);res.json({user:req.session.user});}catch(e){console.error(e);res.status(500).json({error:"Login failed."})}});
 app.post("/api/logout",(req,res)=>{req.session=null;res.json({ok:true})});
 const requireMember=(req,res,next)=>{if(!req.session?.user)return res.status(401).json({error:"Please create an account or sign in."});if(!req.session.user.subscribed)return res.status(403).json({error:"An active $15 subscription is required to use private chat."});next()};
