@@ -2,6 +2,8 @@ require("dotenv").config();
 const express=require("express"),path=require("path"),bcrypt=require("bcryptjs"),cookieSession=require("cookie-session");
 const {createClient}=require("@supabase/supabase-js");
 const app=express(),PORT=process.env.PORT||3000;
+// Render terminates HTTPS at its proxy. Trust that proxy so secure session cookies are preserved.
+app.set("trust proxy",1);
 const SUBSCRIPTION_AMOUNT=Number(process.env.SUBSCRIPTION_AMOUNT||50);
 const SUBSCRIPTION_MONTHS=Number(process.env.SUBSCRIPTION_MONTHS||2);
 const rawSupabaseUrl=String(process.env.SUPABASE_URL||"").trim();
@@ -25,7 +27,11 @@ const requireSupabase=(_,res,next)=>{
 };
 app.use(express.json());app.use(express.urlencoded({extended:true}));
 app.use(cookieSession({name:"trs_session",keys:[process.env.SESSION_SECRET||"change-me"],httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",maxAge:604800000}));
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname,"public"), {
+  setHeaders(res, filePath) {
+    if(filePath.endsWith("/app.js")) res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+  }
+}));
 const requireUser=(req,res,next)=>req.session?.user?next():res.status(401).json({error:"Please create an account or sign in."});
 const requireAdmin=(req,res,next)=>req.session?.user?.is_admin?next():res.status(403).json({error:"Admin access only."});
 async function byEmail(email){const {data,error}=await supabase.from("users").select("*").eq("email",String(email).toLowerCase()).maybeSingle();if(error)throw error;return data;}
