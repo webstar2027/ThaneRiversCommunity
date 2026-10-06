@@ -23,7 +23,7 @@
     <p class="eyebrow">THANE RIVERS COMMUNITY</p>
     <h1>LOVE YOURSELF.<br><span>BE HAPPY.</span><br>BE HEALTHY.</h1>
     <p class="lead">A private online space for fans to connect, talk directly with Thane Rivers, and support the work.</p>
-    <div class="hero-buttons"><button id="subscribeBtn" class="button primary">Subscribe — $15 / 2 months</button></div><p class="hero-note">Create an account first, then subscribe for two months of private community access.</p>
+    <div class="hero-buttons"><button id="subscribeBtn" class="button primary">Subscribe — $50 / 2 months</button></div><p class="hero-note">Create an account first, then subscribe for two months of private community access.</p>
   </div>
 </section>
 
@@ -33,16 +33,16 @@
   <div class="section-heading"><p class="eyebrow">THE COMMUNITY</p><h2>A place to talk directly.</h2><p>Create a free account and use the private website chat to communicate with Thane Rivers.</p></div>
   <div class="community-grid">
     <article class="feature-card dark-card"><span>01</span><h3>Create your account</h3><p>Start with a free account using your name, email and password.</p><button class="button primary" id="createAccountBtn">Create account</button></article>
-    <article class="feature-card blue-card"><span>02</span><h3>Subscribe for $15</h3><p>After creating an account, pay $15 through Flutterwave and receive two months of community access.</p><button class="button dark" id="subscribeCommunityBtn">Subscribe</button></article>
+    <article class="feature-card blue-card"><span>02</span><h3>Subscribe for $50</h3><p>After creating an account, pay $50 through Flutterwave and receive two months of community access.</p><button class="button dark" id="subscribeCommunityBtn">Subscribe</button></article>
     <article class="feature-card white-card"><span>03</span><h3>Chat privately</h3><p>Once subscribed, open your private conversation and message Thane Rivers directly.</p><button class="button dark" id="chatBtn">Open chat</button></article>
   </div>
 </section>
 
 <section id="support" class="support-section">
   <div class="support-inner">
-    <div><p class="eyebrow">SUPPORT THANE RIVERS</p><h2>Two ways to support.</h2><p>Subscription and donations are completely separate. Subscription is $15 for two months of private community access. Donations are optional and you choose the amount.</p></div>
+    <div><p class="eyebrow">SUPPORT THANE RIVERS</p><h2>Two ways to support.</h2><p>Subscription and donations are completely separate. Subscription is $50 for two months of private community access. Donations are optional and you choose the amount.</p></div>
     <div class="support-cards">
-      <article class="support-card subscription-card"><p class="eyebrow">COMMUNITY MEMBERSHIP</p><h3>$15</h3><p>Two months of private community access. Create an account first, then pay securely with Flutterwave.</p><button id="subscribeSupportBtn" class="button primary full">Subscribe for $15</button></article>
+      <article class="support-card subscription-card"><p class="eyebrow">COMMUNITY MEMBERSHIP</p><h3>$50</h3><p>Two months of private community access. Create an account first, then pay securely with Flutterwave.</p><button id="subscribeSupportBtn" class="button primary full">Subscribe for $50</button></article>
     </div>
   </div>
 </section>
@@ -71,7 +71,7 @@
 </main>
 <footer><img src="/thane-rivers-logo.png" alt="Thane Rivers"><p>© <span id="year"></span> Thane Rivers. All rights reserved.</p></footer>
 
-<div id="accountModal" class="overlay"><div class="modal"><button class="close" data-close="accountModal">Close</button><div id="authView"><p class="eyebrow">ACCOUNT</p><h2 id="authTitle">Sign in</h2><form id="authForm"><div id="nameField" class="hidden"><label>Name<input id="name" autocomplete="name"></label></div><label>Email<input id="email" type="email" autocomplete="email" required></label><label>Password<span class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button type="button" class="show" data-target="password">Show</button></span></label><button class="button primary full">Continue</button></form><button id="toggleAuth" class="text-button">Create an account instead</button><p id="authMsg" class="error"></p></div><div id="accountView" class="hidden"><p class="eyebrow">YOUR ACCOUNT</p><h2 id="welcome"></h2><p id="membershipStatus" class="muted"></p><button id="chatFromAccount" class="button primary full">Open private chat</button><button id="donateFromAccount" class="button outline full">Donate</button><button id="subscribeFromAccount" class="button outline full">Subscribe for $15</button><button id="logoutBtn" class="text-button">Log out</button></div></div></div>
+<div id="accountModal" class="overlay"><div class="modal"><button class="close" data-close="accountModal">Close</button><div id="authView"><p class="eyebrow">ACCOUNT</p><h2 id="authTitle">Sign in</h2><form id="authForm"><div id="nameField" class="hidden"><label>Name<input id="name" autocomplete="name"></label></div><label>Email<input id="email" type="email" autocomplete="email" required></label><label>Password<span class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button type="button" class="show" data-target="password">Show</button></span></label><button class="button primary full">Continue</button></form><button id="toggleAuth" class="text-button">Create an account instead</button><p id="authMsg" class="error"></p></div><div id="accountView" class="hidden"><p class="eyebrow">YOUR ACCOUNT</p><h2 id="welcome"></h2><p id="membershipStatus" class="muted"></p><button id="chatFromAccount" class="button primary full">Open private chat</button><button id="donateFromAccount" class="button outline full">Donate</button><button id="subscribeFromAccount" class="button outline full">Subscribe for $50</button><button id="logoutBtn" class="text-button">Log out</button></div></div></div>
 
 <div id="chatModal" class="overlay"><div class="modal chat-modal"><button class="close" data-close="chatModal">Close</button><p class="eyebrow">PRIVATE CHAT</p><h2>Message Thane Rivers</h2><p class="muted">Your messages are sent directly to the admin account.</p><div id="chatMessages" class="chat-messages"><p class="muted">Loading conversation...</p></div><form id="chatForm" class="chat-form"><input id="chatInput" maxlength="2000" placeholder="Write a message..." required><button class="button primary">Send</button></form></div></div>
 <div id="donationModal" class="overlay"><div class="modal"><button class="close" data-close="donationModal">Close</button><p class="eyebrow">DONATION</p><h2>Choose any amount.</h2><p class="muted">You do not need an account to donate.</p><label>Amount (USD)<input id="donationAmountModal" type="number" min="1" step="1" placeholder="25"></label><button id="donateModalBtn" class="button primary full">Continue to Flutterwave</button><p id="donationMsg" class="error"></p></div></div><div id="toast" class="toast"></div>

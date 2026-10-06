@@ -14,3 +14,13 @@ services:
         value: Thane Rivers
       - key: SESSION_SECRET
         generateValue: true
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: FLW_SECRET_KEY
+        sync: false
+      - key: SUBSCRIPTION_AMOUNT
+        value: "50"
+      - key: SUBSCRIPTION_MONTHS
+        value: "2"
