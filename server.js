@@ -101,5 +101,6 @@ app.get("/flutterwave/callback", requireSupabase, async (req, res) => {
   }
 });
 app.get("/api/admin/members",requireSupabase,requireAdmin,async(_,res)=>{const {data,error}=await supabase.from("users").select("id,name,email,is_admin,created_at").order("created_at",{ascending:false});if(error)return res.status(500).json({error:"Could not load members."});res.json({members:data||[]})});
+app.get("/admin",requireAdmin,(req,res)=>res.sendFile(path.join(__dirname,"public","admin.html")));
 app.use((req,res,next)=>{if(req.method==="GET"&&req.accepts("html"))return res.sendFile(path.join(__dirname,"public","index.html"));next();});
 app.listen(PORT,()=>console.log(`Thane Rivers Community running on ${PORT}`));

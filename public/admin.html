@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thane Rivers Community — Admin Dashboard</title>
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">THANE <span>RIVERS</span></div>
+  <div class="top-actions">
+    <a href="/">View website</a>
+    <button id="logoutBtn">Log out</button>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="intro">
+    <p class="eyebrow">ADMIN AREA</p>
+    <h1>Admin Dashboard</h1>
+    <p id="adminIdentity" class="muted">Checking your admin access...</p>
+  </section>
+
+  <section class="stats">
+    <article class="stat"><span>Members</span><strong id="memberCount">—</strong></article>
+    <article class="stat"><span>Messages</span><strong id="messageCount">—</strong></article>
+    <article class="stat"><span>Admin access</span><strong id="adminStatus">Checking</strong></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div><p class="eyebrow">MEMBERS</p><h2>Community accounts</h2></div>
+      <button id="refreshBtn" class="button">Refresh</button>
+    </div>
+    <div id="members" class="table-wrap"><p class="muted">Loading members...</p></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div><p class="eyebrow">PRIVATE CHAT</p><h2>Community messages</h2></div>
+    </div>
+    <div id="messages" class="messages"><p class="muted">Loading messages...</p></div>
+    <form id="replyForm" class="reply-form">
+      <input type="hidden" id="replyUserId">
+      <label>Replying to <strong id="replyTo">Select a message above</strong></label>
+      <div class="reply-row">
+        <textarea id="replyBody" rows="3" maxlength="2000" placeholder="Write your reply..." required></textarea>
+        <button class="button primary" type="submit">Send reply</button>
+      </div>
+      <p id="replyMsg" class="error"></p>
+    </form>
+  </section>
+</main>
+<script src="/admin.js"></script>
+</body>
+</html>
